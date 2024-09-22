@@ -1,12 +1,13 @@
 package main
 
 import (
-	"os"
-	"registro/kafka"
-	"registro/handler"
+	"log"
 	"net/http"
-	"github.com/labstack/echo/v4"
+	"os"
+	"registro/handler"
+	"registro/kafka"
 
+	"github.com/labstack/echo/v4"
 )
 
 func main() {

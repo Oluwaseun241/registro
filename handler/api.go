@@ -1,34 +1,32 @@
 package handler
 
-
 import (
-    "encoding/json"
-    "fmt"
-    "io/ioutil"
-    "net/http"
-    "registro/kafka"
+	"net/http"
+	"registro/kafka"
+
+	"github.com/labstack/echo/v4"
 )
 
 type EventRequest struct {
-    Topic   string `json:"topic"`
-    Message string `json:"message"`
+	Topic   string `json:"topic"`
+	Message string `json:"message"`
 }
 
-func ProduceEvent(w http.ResponseWriter, r *http.Request) {
-    var event EventRequest
-    body, _ := ioutil.ReadAll(r.Body)
-    json.Unmarshal(body, &event)
+func ProduceEvent(c echo.Context) error {
+	var event EventRequest
+	if err := c.Bind(&event); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	}
 
-    err := kafka.ProduceEvent(event.Topic, []byte(event.Message))
-    if err != nil {
-        http.Error(w, "Failed to produce event", http.StatusInternalServerError)
-        return
-    }
+	err := kafka.ProduceEvent(event.Topic, []byte(event.Message))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to produce event"})
+	}
 
-    fmt.Fprintf(w, "Event produced successfully")
+	return c.JSON(http.StatusOK, map[string]string{"message": "Event produced successfully"})
 }
 
-func GetEvents(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "List of events...")
+func GetEvents(c echo.Context) error {
+	// Placeholder for fetching events from the blockchain
+	return c.JSON(http.StatusOK, map[string]string{"message": "List of events..."})
 }
-

@@ -1,12 +1,15 @@
 package kafka
 
 import (
+
 	"log"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
+var producer *kafka.Producer
+
 func InitKafka(broker string) error {
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": broker})
+	_, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": broker})
 	if err != nil {
 		return err
 	}
