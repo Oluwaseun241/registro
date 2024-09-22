@@ -3,13 +3,15 @@ package kafka
 import (
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 func StartConsumer() {
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
+	kafkaBroker := os.Getenv("KAFKA_BROKER")
+	c, err := ckafka.NewConsumer(&ckafka.ConfigMap{
+		"bootstrap.servers": kafkaBroker,
 		"group.id":          "libro-group",
 		"auto.offset.reset": "earliest",
 	})
