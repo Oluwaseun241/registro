@@ -10,7 +10,7 @@ system for tracking events with integrity and accountability.
 - [x] Immutable record of events stored in a blockchain-like data structure.
 - [x] Endpoints for producing events, retrieving the blockchain state, and validating ledger integrity.
 
-## API Endpoints
+## 🚀API Endpoints
 
 - Produce Event
   - Endpoint: `POST/produce`
@@ -30,3 +30,9 @@ system for tracking events with integrity and accountability.
 - Validate Blockchain
   - Endpoint: `GET/blockchain`
   - Description: Validates the integrity of the blockchain ledger.
+
+## Build and run
+
+```
+make build
+```
