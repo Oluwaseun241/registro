@@ -3,6 +3,7 @@ package blockchain
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"strconv"
 	"time"
 )
 
@@ -15,7 +16,7 @@ type Block struct {
 }
 
 func (b *Block) CalculateHash() string {
-	record := string(b.Index) + b.Timestamp.String() + b.Event + b.PrevHash
+	record := strconv.Itoa(b.Index) + b.Timestamp.String() + b.Event + b.PrevHash
 	hash := sha256.New()
 	hash.Write([]byte(record))
 	hashed := hash.Sum(nil)

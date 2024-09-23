@@ -26,6 +26,10 @@ func (l *Ledger) AddEventToLedger(event string) error {
 	return nil
 }
 
+func (l *Ledger) GetChain() []Block {
+	return l.chain.Blocks
+}
+
 // GetBlockchain returns the current state of the blockchain.
 func (l *Ledger) GetBlockchain() []Block {
 	return l.chain.Blocks
