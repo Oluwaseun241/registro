@@ -6,7 +6,9 @@ system for tracking events with integrity and accountability.
 
 ## ✨Features
 
--[*] Real-time event production and consumption using Apache Kafka. -[*] Immutable record of events stored in a blockchain-like data structure. -[*] Endpoints for producing events, retrieving the blockchain state, and validating ledger integrity.
+- [x] Real-time event production and consumption using Apache Kafka.
+- [x] Immutable record of events stored in a blockchain-like data structure.
+- [x] Endpoints for producing events, retrieving the blockchain state, and validating ledger integrity.
 
 ## API Endpoints
 
