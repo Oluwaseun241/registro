@@ -1,34 +1,45 @@
 package kafka
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"registro/blockchain"
 
-	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/segmentio/kafka-go"
+	ckafka "github.com/segmentio/kafka-go"
 )
 
-func StartConsumer() {
-	kafkaBroker := os.Getenv("KAFKA_BROKER")
-	c, err := ckafka.NewConsumer(&ckafka.ConfigMap{
-		"bootstrap.servers": kafkaBroker,
-		"group.id":          "libro-group",
-		"auto.offset.reset": "earliest",
-	})
-	if err != nil {
-		log.Fatalf("Failed to start consumer: %v", err)
-	}
-	defer c.Close()
+var Ledger *blockchain.Ledger
 
-	c.SubscribeTopics([]string{"libro-events"}, nil)
+func StartConsumer() {
+
+	Ledger = blockchain.NewLedger()
+
+	kafkaBroker := os.Getenv("KAFKA_BROKER")
+	reader := ckafka.NewReader(ckafka.ReaderConfig{
+		Brokers:     []string{kafkaBroker},
+		GroupID:     "libro-group",
+		Topic:       "libro-events",
+		StartOffset: kafka.FirstOffset,
+	})
+
+	defer reader.Close()
 
 	for {
-		msg, err := c.ReadMessage(-1)
-		if err == nil {
-			fmt.Printf("Received event: %s\n", string(msg.Value))
-			// TODO: Add logic to record to blockchain
-		} else {
+		msg, err := reader.ReadMessage(context.Background())
+		if err != nil {
 			log.Printf("Error reading message: %v", err)
+			continue
+		}
+
+		event := string(msg.Value)
+		fmt.Printf("Received event: %s\n", string(msg.Value))
+
+		err = Ledger.AddEventToLedger(event)
+		if err != nil {
+			log.Printf("Failed to add event to ledger: %v", err)
 		}
 	}
 }

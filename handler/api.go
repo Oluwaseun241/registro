@@ -27,6 +27,11 @@ func ProduceEvent(c echo.Context) error {
 }
 
 func GetEvents(c echo.Context) error {
-	// Placeholder for fetching events from the blockchain
-	return c.JSON(http.StatusOK, map[string]string{"message": "List of events..."})
+	return c.JSON(http.StatusOK, kafka.Ledger.GetBlockchain())
+}
+
+// ValidateBlockchain checks the integrity of the ledger.
+func ValidateBlockchain(c echo.Context) error {
+	isValid := kafka.Ledger.ValidateLedger()
+	return c.JSON(http.StatusOK, map[string]bool{"isValid": isValid})
 }
